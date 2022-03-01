@@ -1,17 +1,19 @@
 on:
   workflow_dispatch:
-
+    inputs:
+      release:
+        description: 'JDK feature release number'     
+        required: true
+        default: '17'
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
       - uses: oracle-actions/setup-java@v1
         with:
-          release: 17
-
+          website: jdk.java.net
+          release: ${{ github.event.inputs.release }}
       - run: |
           javac -d out Foo.java
           jar --create --file foo.jar -C out .
